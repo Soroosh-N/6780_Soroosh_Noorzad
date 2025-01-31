@@ -1,4 +1,5 @@
 #include <stm32f0xx_hal.h>
+#include <assert.h>
 
 int lab1_main(void) {
     HAL_Init(); // Reset of all peripherals, init the Flash and Systick
@@ -11,6 +12,7 @@ int lab1_main(void) {
     GPIO_InitTypeDef initStr = {GPIO_PIN_8 | GPIO_PIN_9, GPIO_MODE_OUTPUT_PP, GPIO_SPEED_FREQ_LOW, GPIO_NOPULL};
     HAL_GPIO_Init(GPIOC, &initStr); // Initialize pins PC8 & PC9
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET); // Start PC8 high
+    assert(GPIOC->MODER == 0x50000);
     while (1) {
         HAL_Delay(200); // Delay 200ms
         // Toggle the output state of both PC8 and PC9

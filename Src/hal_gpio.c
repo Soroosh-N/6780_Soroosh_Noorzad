@@ -17,7 +17,7 @@ void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
         // Clear bits
         GPIOC->MODER &= ~(0xFF000);
         // Set as output mode
-        GPIOC->MODER |= 0x55000;
+        GPIOC->MODER |= (0x55 << 2 * 6);
         // Configure output type as Push-Pull
         GPIOC->OTYPER &= ~(0xF<<6);
         // Configure output speed as Low Speed
@@ -36,6 +36,9 @@ void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
     }
 }
 
+void My_HAL_RCC_GPIOC_CLK_ENABLE(void){
+    RCC->AHBENR |= RCC_AHBENR_GPIOCEN; // Enable GPIOC clock using bitwise OR
+}
 
 /*
 void My_HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)

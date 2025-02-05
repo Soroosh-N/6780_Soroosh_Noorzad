@@ -4,16 +4,15 @@
 #include <main.h>
 
 int lab1_main(void) {
-    /* Part A: This example uses HAL library calls to control the GPIOC peripheral. You’ll be redoing this code with hardware register access. */
-    // Reset of all peripherals, init the Flash and Systick
-    HAL_Init();
-    //Configure the system clock
-    SystemClock_Config();
-    // Enable the GPIOC clock in the RCC
-    __HAL_RCC_GPIOC_CLK_ENABLE();
-    // Set up a configuration struct to pass to the initialization function
-
     // // ************ Check off 1 ************
+    // /* Part A: This example uses HAL library calls to control the GPIOC peripheral. You’ll be redoing this code with hardware register access. */
+    // // Reset of all peripherals, init the Flash and Systick
+    // HAL_Init();
+    // //Configure the system clock
+    // SystemClock_Config();
+    // // Enable the GPIOC clock in the RCC
+    // __HAL_RCC_GPIOC_CLK_ENABLE();
+    // // Set up a configuration struct to pass to the initialization function
     // GPIO_InitTypeDef initStrGPC = {0};
     // // GPIO-C:
     // initStrGPC.Pin = GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9;
@@ -42,6 +41,7 @@ int lab1_main(void) {
     // assert((GPIOA->MODER & 0x03) == 0x00);
 
     // ************ Check off 2 ************
+    My_HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef initStrGPC = {0};
     // GPIO-C:
     // Initialize pins

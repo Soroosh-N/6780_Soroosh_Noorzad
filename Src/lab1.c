@@ -4,7 +4,7 @@
 #include <main.h>
 
 int lab1_main(void) {
-    // // Configure the system clock
+    // Configure the system clock
     SystemClock_Config();
 
     // // ************ Check off 1 ************
@@ -43,7 +43,7 @@ int lab1_main(void) {
     // Start PC8 high
     // HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
     // while (1) {
-    //     // Delay 200ms
+    //     // Delay in ms
     //     HAL_Delay(200);
     //     // Toggle the output state of both PC8 and PC9
     //     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
@@ -64,12 +64,15 @@ int lab1_main(void) {
     HAL_Delay(1);
     // Assert that PA0 is configured as input (00)
     assert((GPIOA->MODER & 0x03) == 0x00);
-    // Start PC8 high
-    My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
+    // LD3: I/O PC6 - Red LED
+    // LD4: I/O PC8 - Orange LED
+    // LD5: I/O PC9 - Green LED
+    // LD6: I/O PC7 - Blue LED
+    // Start PC6 high
+    My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
     while (1) {
-        // Delay 200ms
-        HAL_Delay(200);
-        // Toggle the output state of both PC8 and PC9
-        My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+        HAL_Delay(300);
+        // Toggle the output state of both PC6 and PC7
+        My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6 | GPIO_PIN_7);
     }
 }

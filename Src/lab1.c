@@ -4,12 +4,13 @@
 #include <main.h>
 
 int lab1_main(void) {
+    // // Configure the system clock
+    SystemClock_Config();
+
     // // ************ Check off 1 ************
     // /* Part A: This example uses HAL library calls to control the GPIOC peripheral. You’ll be redoing this code with hardware register access. */
     // // Reset of all peripherals, init the Flash and Systick
     // HAL_Init();
-    // //Configure the system clock
-    // SystemClock_Config();
     // // Enable the GPIOC clock in the RCC
     // __HAL_RCC_GPIOC_CLK_ENABLE();
     // // Set up a configuration struct to pass to the initialization function
@@ -39,6 +40,14 @@ int lab1_main(void) {
     // HAL_Delay(1);
     // // Assert that PA0 is configured as input (00)
     // assert((GPIOA->MODER & 0x03) == 0x00);
+    // Start PC8 high
+    // HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
+    // while (1) {
+    //     // Delay 200ms
+    //     HAL_Delay(200);
+    //     // Toggle the output state of both PC8 and PC9
+    //     HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+    // }
 
     // ************ Check off 2 ************
     My_HAL_RCC_GPIOC_CLK_ENABLE();
@@ -55,9 +64,8 @@ int lab1_main(void) {
     HAL_Delay(1);
     // Assert that PA0 is configured as input (00)
     assert((GPIOA->MODER & 0x03) == 0x00);
-    
     // Start PC8 high
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
+    My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
     while (1) {
         // Delay 200ms
         HAL_Delay(200);

@@ -70,6 +70,6 @@ int lab1_main(void) {
         // Delay 200ms
         HAL_Delay(200);
         // Toggle the output state of both PC8 and PC9
-        HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+        My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
     }
 }

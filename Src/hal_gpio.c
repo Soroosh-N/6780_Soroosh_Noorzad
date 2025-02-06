@@ -4,13 +4,14 @@
 
 void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
     if (GPIOx == GPIOA) {
-        // Configure PA0 as Digital Input
-        // Set as input mode
+        // Configure PA0
+        // Set as Digital Input
         GPIOA->MODER &= ~(0x3);
-        // Configure PA0 speed as Low Speed
+        // Set speed as Low Speed
         GPIOA->OSPEEDR &= ~(0x3);
-        // Configure PA0 with Pull-Down resistor
+        // Clear bits
         GPIOA->PUPDR &= ~(0x3);
+        // Set pull-down (10)
         GPIOA->PUPDR |= (0x2);
     } else if (GPIOx == GPIOC) {
         // Configure PC6, PC7, PC8, PC9 as General Purpose Output
@@ -39,6 +40,9 @@ void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
 void My_HAL_RCC_GPIOC_CLK_ENABLE(void){
     RCC->AHBENR |= RCC_AHBENR_GPIOCEN; // Enable GPIOC clock using bitwise OR
 }
+void My_HAL_RCC_GPIOA_CLK_ENABLE(void){
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Enable GPIOA clock
+}
 
 /*
 void My_HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
@@ -46,12 +50,12 @@ void My_HAL_GPIO_DeInit(GPIO_TypeDef  *GPIOx, uint32_t GPIO_Pin)
 }
 */
 
-/*
-GPIO_PinState My_HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
-{
-    return -1;
+GPIO_PinState My_HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
+    // Read button state
+    return (GPIOx->IDR & GPIO_Pin) ? GPIO_PIN_SET : GPIO_PIN_RESET;
+    //     return -1;
 }
-*/
+
 
 
 void My_HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState){
@@ -64,11 +68,6 @@ void My_HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState 
     }
 }
 
-
-
-// void My_HAL_GPIO_TogglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin){
-
-// }
 void My_HAL_GPIO_TogglePin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pins) {
     GPIOx->ODR ^= GPIO_Pins;  // Toggle multiple pins using XOR operation
 }

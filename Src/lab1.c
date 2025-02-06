@@ -50,12 +50,12 @@ int lab1_main(void) {
     // }
 
     // ************ Check off 2 ************
+    My_HAL_RCC_GPIOA_CLK_ENABLE();
     My_HAL_RCC_GPIOC_CLK_ENABLE();
     GPIO_InitTypeDef initStrGPC = {0};
     // GPIO-C:
     // Initialize pins
     My_HAL_GPIO_Init(GPIOC, &initStrGPC);
-    // Optional delay to ensure the initialization is complete
     HAL_Delay(1);
     // Assertion on GPIOC (All the pins should have the 01 value => 01010101 = 55)
     assert(GPIOC->MODER == 0x55000);

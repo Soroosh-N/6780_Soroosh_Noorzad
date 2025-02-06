@@ -96,24 +96,38 @@ int lab1_main(void) {
     // LD6: I/O PC7 - Blue LED
     // Start PC6 high
     My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
-    int a = 0;
+    uint32_t a = 0;
+    uint32_t debouncer = 0;
     while (1) {
-        HAL_Delay(300);
-        // Read the user button state
+        // When BTN is bouncing the bit-vector value is random since bits are set when the BTN is high and not when it bounces low.
+        // Always shift every loop iteration
+        debouncer = (debouncer << 1);
         if (My_HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-            // If button is pressed, toggle LED state
+            // Read the user BTN state
+            // If BTN is set/high (BTN is pressed) set lowest bit of bit-vector
+            debouncer |= 0x01;
+        }
+        if (debouncer == 0xFFFFFFFF) {
+            // Triggers repeatedly when button is steady high!
+        }
+        if (debouncer == 0x00000000) {
+            // Triggers repeatedly when button is steady low!
+        }
+        if (debouncer == 0x7FFFFFFF) {
+            // Triggers only once when transitioning to steady high!
+            // Toggle LED state
             a += 1;
             if (a == 1){
-                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6 | GPIO_PIN_7);
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6 | GPIO_PIN_8);
             }else if(a == 2){
-                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7 | GPIO_PIN_8);
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_7);
             }else if(a == 3){
-                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
-            }else if(a == 4){
-                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9 | GPIO_PIN_6);
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7 | GPIO_PIN_9);
             }else{
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9 | GPIO_PIN_6);
                 a = 0;
             }
         }
+        HAL_Delay(5);
     }
 }

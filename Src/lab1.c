@@ -40,7 +40,7 @@ int lab1_main(void) {
     // HAL_Delay(1);
     // // Assert that PA0 is configured as input (00)
     // assert((GPIOA->MODER & 0x03) == 0x00);
-    // Start PC8 high
+    // // Start PC8 high
     // HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
     // while (1) {
     //     // Delay in ms

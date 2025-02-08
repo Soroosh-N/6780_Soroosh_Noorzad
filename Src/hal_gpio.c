@@ -12,24 +12,20 @@ void my_exti_config(void){
     GPIOA->PUPDR &= ~(0x3);
     // Set pull-down (10)
     GPIOA->PUPDR |= (0x2);
-
     // Enable the RCC clock for SYSCFG
     RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
-
     // Enable rising edge trigger for EXTI0
-    EXTI->RTSR |= EXTI_RTSR_TR0;  
+    EXTI->RTSR |= EXTI_RTSR_TR0;
     // Unmask EXTI0 (Enable interrupt)
     EXTI->IMR |= EXTI_IMR_IM0;
-
     // Route PA0 to EXTI0: Connect EXTI0 to PA0 (EXTI0[3:0] = 0000 for PA0)
     SYSCFG->EXTICR[0] &= ~(0xF);
-
     // Enable the EXTI0_1 interrupt in NVIC
     NVIC_EnableIRQ(EXTI0_1_IRQn);
-    // Set EXTI0_1 priority to 0
-    NVIC_SetPriority(EXTI0_1_IRQn, 0);
+    // Set EXTI0_1 priority
+    NVIC_SetPriority(EXTI0_1_IRQn, 3);
+    NVIC_SetPriority(SysTick_IRQn, 0);
 }
-
 
 void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
     if (GPIOx == GPIOA) {
@@ -83,8 +79,6 @@ GPIO_PinState My_HAL_GPIO_ReadPin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin) {
     // Read button state
     return (GPIOx->IDR & GPIO_Pin) ? GPIO_PIN_SET : GPIO_PIN_RESET;
 }
-
-
 
 void My_HAL_GPIO_WritePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_PinState PinState){
     if (PinState == GPIO_PIN_SET) {

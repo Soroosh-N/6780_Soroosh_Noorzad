@@ -4,14 +4,16 @@
 #include <main.h>
 
 void EXTI0_1_IRQHandler(void){
-    // Check if EXTI0 triggered the interrupt
-    if (EXTI->PR & EXTI_PR_PR0){
-        // Clear the pending interrupt flag
-        EXTI->PR |= EXTI_PR_PR0;
-        My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+    // ************ Check off 2 ************
+    volatile uint32_t i = 0;
+    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+    while(i<4500000){
+        i += 1;
     }
+    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+    // Clear the pending interrupt flag
+    EXTI->PR |= EXTI_PR_PR0;
 }
-
 
 int lab2_main(void) {
     // Configure the system clock
@@ -27,11 +29,6 @@ int lab2_main(void) {
     HAL_Delay(1);
     // Assertion on GPIOC (All the pins should have the 01 value => 01010101 = 55)
     assert(GPIOC->MODER == 0x55000);
-    // // GPIO-A: Configure PA0 as Digital Input (bits 0 and 1 should be 00)
-    // My_HAL_GPIO_Init(GPIOA, &initStrGPC);
-    // HAL_Delay(1);
-    // // Assert that PA0 is configured as input (00)
-    // assert((GPIOA->MODER & 0x03) == 0x00);
     // Start Green LED
     My_HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, GPIO_PIN_SET);
     HAL_Delay(1);
@@ -45,7 +42,7 @@ int lab2_main(void) {
     // EXTI0 should be unmasked and rising trigger enabled
     assert((EXTI->IMR & EXTI_IMR_IM0)); // Interrupt is enabled
     assert((EXTI->RTSR & EXTI_RTSR_TR0)); // Rising trigger is enabled
-    assert((SYSCFG->EXTICR[0] & SYSCFG_EXTICR1_EXTI0) == 0); // Is correctly mapped to PA0
+    assert((SYSCFG->EXTICR[0] & SYSCFG_EXTICR1_EXTI0) == 0); // Ensure PA0 is correctly mapped to EXTI0
     while (1) {
         My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
         HAL_Delay(600);

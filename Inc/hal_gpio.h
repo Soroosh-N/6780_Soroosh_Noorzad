@@ -10,3 +10,5 @@ void My_HAL_GPIO_TogglePin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pins);
 
 void My_HAL_RCC_GPIOC_CLK_ENABLE(void);
 void My_HAL_RCC_GPIOA_CLK_ENABLE(void);
+void My_HAL_RCC_TIMER2_ENABLE(void);
+void My_HAL_RCC_TIMER3_ENABLE(void);

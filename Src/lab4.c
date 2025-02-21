@@ -21,9 +21,17 @@ void USART_Init(void) {
     // Enable USART3
     USART3->CR1 |= USART_CR1_UE;
 }
+
 void USART3_TransmitChar(char c) {
     while (!(USART3->ISR & USART_ISR_TXE));     // Wait until transmit data register is empty (TXE bit is set)
     USART3->TDR = c;                            // Write the character
+}
+
+void USART3_TransmitString(const char *str) {
+    while (*str) {               // Loop until null character ('\0') is encountered
+        USART3_TransmitChar(*str); // Transmit
+        str++;
+    }
 }
 
 int lab4_main(void) {
@@ -43,13 +51,23 @@ int lab4_main(void) {
 
     USART_Init();
     while (1) {
+        // Sending Character:
         // Loop Method:
         USART3_TransmitChar('A'); // Transmit 'A'
         for (volatile int i = 0; i < 100000; i++); // Simple delay
-
         // // Button Push:
         // if (!(GPIOA->IDR & GPIO_IDR_0)) { // Check if button (PA0) is pressed
         //     USART3_TransmitChar('B'); // Send 'B'
+        //     while (!(GPIOA->IDR & GPIO_IDR_0)); // Wait for button release
+        // }
+
+        // Sending String:
+        // //Loop Method:
+        // USART3_TransmitString("Soroosh Noorzad!\r\n"); // Send a message
+        // for (volatile int i = 0; i < 1000000; i++);  // Delay to prevent flooding the terminal
+        // // Button Push:
+        // if (!(GPIOA->IDR & GPIO_IDR_0)) { // Check if button is pressed
+        //     USART3_TransmitString("Button Pressed!\r\n");
         //     while (!(GPIOA->IDR & GPIO_IDR_0)); // Wait for button release
         // }
     }

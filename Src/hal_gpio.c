@@ -44,7 +44,9 @@ void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
         HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
     }
 }
-
+void My_HAL_RCC_USART_CLK_ENABLE(void){
+    RCC->APB1ENR |= RCC_APB1ENR_USART3EN; // Enable USART3 clock
+}
 void My_HAL_RCC_GPIOC_CLK_ENABLE(void){
     RCC->AHBENR |= RCC_AHBENR_GPIOCEN; // Enable GPIOC clock using bitwise OR
 }

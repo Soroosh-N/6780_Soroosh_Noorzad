@@ -12,3 +12,4 @@ void My_HAL_RCC_GPIOC_CLK_ENABLE(void);
 void My_HAL_RCC_GPIOA_CLK_ENABLE(void);
 void My_HAL_RCC_TIMER2_ENABLE(void);
 void My_HAL_RCC_TIMER3_ENABLE(void);
+void My_HAL_RCC_USART_CLK_ENABLE(void);

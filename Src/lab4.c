@@ -11,7 +11,7 @@ PB11,   PB10,   PB14,   PB13,   PB12,
 PD9,    PD8,    PD12,   PD11,   PD10,
 PC11,   PC10,   PD2,    -   ,   PC12,
 */
-
+//  PB10 and PB11
 void USART_Init(void) {
     // USART3
     My_HAL_RCC_USART_CLK_ENABLE();              // Enable clock
@@ -34,15 +34,51 @@ void USART3_TransmitString(const char *str) {
     }
 }
 
+char USART3_ReceiveChar(void) {
+    while (!(USART3->ISR & USART_ISR_RXNE)); // Wait for RXNE (data received)
+    return USART3->RDR; // Read received character
+}
+
+void PA0_Interrupt_Init(void) {
+    // Enable SYSCFG clock (needed for external interrupts)
+    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGCOMPEN;
+    // Connect EXTI0 line to PA0
+    SYSCFG->EXTICR[0] &= ~(SYSCFG_EXTICR1_EXTI0);   // Ensure PA0 is mapped to EXTI0
+    EXTI->FTSR |= EXTI_FTSR_TR0;                    // Falling edge trigger
+    // Enable EXTI0 interrupt
+    EXTI->IMR |= EXTI_IMR_IM0;                      // Unmask interrupt line 0
+    NVIC_EnableIRQ(EXTI0_1_IRQn);                   // Enable EXTI0 interrupt in NVIC
+    NVIC_SetPriority(EXTI0_1_IRQn, 3);              // Set priority
+    NVIC_SetPriority(SysTick_IRQn, 0);              // Set Systick priority
+}
+
+void EXTI0_1_IRQHandler(void) {
+    USART3_TransmitString("Button Pressed!\r\n");
+    GPIOC->ODR &= ~(GPIO_PIN_6);
+    for (uint32_t i = 0; i < 6; i++) {
+        My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+        volatile uint32_t C = 0;
+        while(C<500000){
+            C += 1;
+        }
+    }
+    EXTI->PR |= EXTI_PR_PR0; // Clear interrupt flag (write 1 to clear)
+}
+
 int lab4_main(void) {
     // Configure the system clock
-    SystemClock_Config();    
+    SystemClock_Config();
+    GPIO_InitTypeDef initStr = {0};
+
+    // GPIO-A
+    My_HAL_RCC_GPIOA_CLK_ENABLE();      // Enable Clock
+    My_HAL_GPIO_Init(GPIOA, &initStr);  // Initialize pins
+    PA0_Interrupt_Init();
 
     // GPIO-C
-    My_HAL_RCC_GPIOC_CLK_ENABLE();
-    GPIO_InitTypeDef initStrGPC = {0};
-    My_HAL_GPIO_Init(GPIOC, &initStrGPC);   // Initialize pins
-    // PC4 and PC5:
+    My_HAL_RCC_GPIOC_CLK_ENABLE();      // Enable Clock
+    My_HAL_GPIO_Init(GPIOC, &initStr);  // Initialize pins
+    // PC4 and PC5 for USART3:
     GPIOC->MODER &= ~(0xF << (4 * 2));  // Clear Bits for PC4 and PC5
     GPIOC->MODER |= (0xA << (4 * 2));   // Set PC4 and PC5 to AF mode (10)
     // Select AF1 (USART3)
@@ -51,24 +87,32 @@ int lab4_main(void) {
 
     USART_Init();
     while (1) {
-        // Sending Character:
-        // Loop Method:
-        USART3_TransmitChar('A'); // Transmit 'A'
-        for (volatile int i = 0; i < 100000; i++); // Simple delay
-        // // Button Push:
-        // if (!(GPIOA->IDR & GPIO_IDR_0)) { // Check if button (PA0) is pressed
-        //     USART3_TransmitChar('B'); // Send 'B'
-        //     while (!(GPIOA->IDR & GPIO_IDR_0)); // Wait for button release
-        // }
-
-        // Sending String:
-        // //Loop Method:
-        // USART3_TransmitString("Soroosh Noorzad!\r\n"); // Send a message
-        // for (volatile int i = 0; i < 1000000; i++);  // Delay to prevent flooding the terminal
-        // // Button Push:
-        // if (!(GPIOA->IDR & GPIO_IDR_0)) { // Check if button is pressed
-        //     USART3_TransmitString("Button Pressed!\r\n");
-        //     while (!(GPIOA->IDR & GPIO_IDR_0)); // Wait for button release
-        // }
+        // Receiving Character
+        char received = USART3_ReceiveChar(); // Get character from terminal
+        switch (received) {
+            case 'r':
+                USART3_TransmitString("R => Red LED Toggled!\r\n");
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);   // Toggle Red LED (PC6)
+                break;
+            case 'g':
+                USART3_TransmitString("G => Green LED Toggled!\r\n");
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);   // Toggle Green LED (PC9)
+                break;
+            case 'o':
+                USART3_TransmitString("O => Orange LED Toggled!\r\n");
+                My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);   // Toggle Blue LED (PC7)
+                break;
+            default:
+                USART3_TransmitChar(received); // Transmit received char
+                USART3_TransmitString(" is not a command!\r\n");
+                GPIOC->ODR &= ~(GPIO_PIN_6 | GPIO_PIN_8 | GPIO_PIN_9);
+                for (uint32_t i = 0; i < 6; i++) {
+                    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
+                    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8);
+                    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_9);
+                    HAL_Delay(300);
+                }
+                break;
+        }
     }
 }

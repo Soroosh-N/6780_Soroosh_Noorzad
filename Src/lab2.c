@@ -3,17 +3,19 @@
 #include <assert.h>
 #include <main.h>
 
-void EXTI0_1_IRQHandler(void){
-    // ************ Check off 2 ************
-    volatile uint32_t i = 0;
-    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
-    while(i<4500000){
-        i += 1;
-    }
-    My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
-    // Clear the pending interrupt flag
-    EXTI->PR |= EXTI_PR_PR0;
-}
+// Commented this function, because we are using this interrupt for the 4th lab.
+// Uncomment this function while compiling lab2.
+// void EXTI0_1_IRQHandler(void){
+//     // ************ Check off 2 ************
+//     volatile uint32_t i = 0;
+//     My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+//     while(i<4500000){
+//         i += 1;
+//     }
+//     My_HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_8 | GPIO_PIN_9);
+//     // Clear the pending interrupt flag
+//     EXTI->PR |= EXTI_PR_PR0;
+// }
 
 int lab2_main(void) {
     // Configure the system clock

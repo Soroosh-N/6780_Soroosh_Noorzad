@@ -47,11 +47,17 @@ void My_HAL_GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_InitTypeDef *GPIO_Init){
 void My_HAL_RCC_USART_CLK_ENABLE(void){
     RCC->APB1ENR |= RCC_APB1ENR_USART3EN; // Enable USART3 clock
 }
-void My_HAL_RCC_GPIOC_CLK_ENABLE(void){
-    RCC->AHBENR |= RCC_AHBENR_GPIOCEN; // Enable GPIOC clock using bitwise OR
+void My_HAL_RCC_I2C2_CLK_ENABLE(void) {
+    RCC->APB1ENR |= RCC_APB1ENR_I2C2EN; // Enable I2C2 clock
 }
 void My_HAL_RCC_GPIOA_CLK_ENABLE(void){
-    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Enable GPIOA clock
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN; // Enable GPIO-A clock
+}
+void My_HAL_RCC_GPIOB_CLK_ENABLE(void){
+    RCC->AHBENR |= RCC_AHBENR_GPIOBEN; // Enable GPIO-B clock
+}
+void My_HAL_RCC_GPIOC_CLK_ENABLE(void){
+    RCC->AHBENR |= RCC_AHBENR_GPIOCEN; // Enable GPIO-C clock using bitwise OR
 }
 void My_HAL_RCC_TIMER2_ENABLE(void){
     RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;

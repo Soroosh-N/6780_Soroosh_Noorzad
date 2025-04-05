@@ -15,5 +15,7 @@ void My_HAL_RCC_TIMER2_ENABLE(void);
 void My_HAL_RCC_TIMER3_ENABLE(void);
 void My_HAL_RCC_USART_CLK_ENABLE(void);
 void My_HAL_RCC_I2C2_CLK_ENABLE(void);
+void My_HAL_RCC_ADC_CLK_ENABLE(void);
+void My_HAL_RCC_DAC_CLK_ENABLE(void);
 uint8_t My_HAL_I2C_Master_Transmit(uint8_t devAddr, uint8_t *pData, uint16_t size);
 uint8_t My_HAL_I2C_Master_Receive(uint8_t devAddr, uint8_t *pData, uint16_t size);

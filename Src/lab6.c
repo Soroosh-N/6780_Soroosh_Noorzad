@@ -32,8 +32,7 @@ void ADC_Init(void) {
 }
 
 void DAC_Init(void) {
-    //My_HAL_RCC_DAC_CLK_ENABLE();
-    RCC->APB1ENR |= RCC_APB1ENR_DACEN;
+    My_HAL_RCC_DAC_CLK_ENABLE();
 
     // Set PA4 (DAC_OUT1) to Analog Mode
     GPIOA->MODER |= (3 << (4 * 2));  // Analog Mode
@@ -112,7 +111,7 @@ int lab6_main(void) {
     // Sine Wave: 8-bit, 32 samples per cycle
     uint8_t waveform1[32] = {127,151,175,197,216,232,244,251,254,251,244,232,216,197,175,151,127,102,78,56,37,21,9,2,0,2,9,21,37,56,78,102};
     // Triangle Wave: 8-bit, 32 samples/cycle
-    uint8_t waveform2[32] = {0,15,31,47,63,79,95,111,127,142,158,174,190,206,222,238,254,238,222,206,190,174,158,142,127,111,95,79,63,47,31,15};
+    // uint8_t waveform2[32] = {0,15,31,47,63,79,95,111,127,142,158,174,190,206,222,238,254,238,222,206,190,174,158,142,127,111,95,79,63,47,31,15};
 
     while (1) {
         DAC->DHR8R1 = waveform1[i];  // Write value to DAC

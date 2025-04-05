@@ -48,7 +48,7 @@ void My_HAL_RCC_ADC_CLK_ENABLE(void){
     RCC->APB2ENR |= RCC_APB2ENR_ADCEN; // Enable ADC Clock
 }
 void My_HAL_RCC_DAC_CLK_ENABLE(void){
-    RCC->APB2ENR |= RCC_APB1ENR_DACEN; // Enable DAC Clock
+    RCC->APB1ENR |= RCC_APB1ENR_DACEN; // Enable DAC Clock
 }
 void My_HAL_RCC_USART_CLK_ENABLE(void){
     RCC->APB1ENR |= RCC_APB1ENR_USART3EN; // Enable USART3 clock

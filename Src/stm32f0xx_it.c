@@ -22,6 +22,8 @@
 #include <stm32f0xx_it.h>
 #include <hal_gpio.h>
 
+extern void Lab7_Systick_Callback();
+
 /******************************************************************************/
 /*            Cortex-M0 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -80,6 +82,9 @@ void SysTick_Handler(void){
     // }else{
     //     i += 1;
     // }
+    #if defined(LAB7)
+    Lab7_Systick_Callback();
+    #endif
 }
 
 /******************************************************************************/
